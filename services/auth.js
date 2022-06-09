@@ -33,6 +33,12 @@ var authService = {
         }
         
     },
+    isAdmin: function (user) {
+        return user.role == 1
+    },
+    isUser: function (user) {
+        return user.role == 2
+    },
     hashPassword: function (plainTextPassword) {
         let salt = bcrypt.genSaltSync(10);
         let hash = bcrypt.hashSync(plainTextPassword, salt);
