@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const PostController = require('../controllers/PostController');
+const postController = require('../controllers/postController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const multer = require('multer')
 
@@ -33,7 +33,7 @@ const upload = multer({
     limits: { fileSize: 10485760 }
 })
 
-router.get('/', PostController.index);
-router.post('/', /*isAuthenticated,*/ upload.single('picture'), PostController.create);
+router.get('/', postController.index);
+router.post('/', isAuthenticated, upload.single('picture'), postController.create);
 
 module.exports = router;

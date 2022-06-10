@@ -8,10 +8,11 @@ var authService = {
             {
                 email: user.email,
                 id: user.id,
+                role: user.role,
             },
             `${process.env.JWT_SECRET_KEY}`,
             {
-                expiresIn: '1h'
+                expiresIn: '100h'
             }
         );
         return token;
@@ -34,10 +35,10 @@ var authService = {
         
     },
     isAdmin: function (user) {
-        return user.role == 1
+        return user?.role == 1
     },
     isUser: function (user) {
-        return user.role == 2
+        return user?.role == 2
     },
     hashPassword: function (plainTextPassword) {
         let salt = bcrypt.genSaltSync(10);
