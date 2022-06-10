@@ -15,6 +15,10 @@ module.exports = (sequelize, DataTypes) => {
         through: 'category_post',
         foreignKey: 'postId'
       })
+      models.Post.belongsToMany(models.Tag, {
+        through: 'post_tag',
+        foreignKey: 'postId'
+      })
     }
   }
   Post.init({

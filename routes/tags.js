@@ -5,8 +5,9 @@ const tagController = require('../controllers/tagController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 
 
-// router.get('/', tagController.index);
-// router.post('/', tagController.index);
+router.post('/', isAuthenticated, tagController.store);
+router.get('/', tagController.index);
+router.delete('/:id', isAuthenticated, tagController.update);
 
 
 

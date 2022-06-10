@@ -1,9 +1,11 @@
 const models = require('../models')
 const { isAdmin } = require('../services/auth')
 const response = require('../services/response')
-const {validateEmail, validatePassword} = require('../services/validation')
+const { validateEmail, validatePassword } = require('../services/validation')
 const authService = require('../services/auth')
 
+
+//
 const signup = async (req, res, next) => {
     const name = String(req.body.name?.trim())
     const email = String(req.body.email?.trim())
@@ -21,7 +23,7 @@ const signup = async (req, res, next) => {
         res.send(response.errorResponse('Your password should be 6 characters at least'))
         return
     }
-    
+
     const [user, created] = await models.User.findOrCreate({
         where: {
             email: email
@@ -39,6 +41,8 @@ const signup = async (req, res, next) => {
     }
 }
 
+
+//
 const signin = async (req, res, next) => {
     const email = req.body.email?.trim()
     const password = req.body.password?.trim()
