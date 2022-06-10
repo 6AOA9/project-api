@@ -23,6 +23,7 @@ const show = (req, res, next) => {
 const create = async (req, res, next) => {
     const title = String(req.body.title?.trim())
     const content = String(req.body.content?.trim())
+    const categories = req.body.categories
     if (title == '') {
         res.send(response.errorResponse('Please fill the post title'))
         return
@@ -37,9 +38,13 @@ const create = async (req, res, next) => {
         userId: req.user.id,
         views: 0,
         verified: isAdmin(req.user) ? 1 : 0,
-        picture: req.file.filename
+        picture: req.file.filename,
     })
     if (post) {
+        console.log(categories)
+        if (Array.isArray(categories)) {
+            post.setCategories(categories)
+        }
         res.send(response.successResponse(post))
     } else {
         res.send(response.errorResponse('An error occurred while adding the post'))
