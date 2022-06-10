@@ -21,6 +21,7 @@ const signup = async (req, res, next) => {
         res.send(response.errorResponse('Your password should be 6 characters at least'))
         return
     }
+    
     const [user, created] = await models.User.findOrCreate({
         where: {
             email: email

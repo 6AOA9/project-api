@@ -16,7 +16,10 @@ module.exports = (sequelize, DataTypes) => {
   Post.init({
     title: DataTypes.STRING,
     content: DataTypes.TEXT,
-    userId: DataTypes.INTEGER
+    userId: DataTypes.INTEGER,
+    verified: DataTypes.BOOLEAN,
+    views: DataTypes.INTEGER,
+    picture: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Post',
