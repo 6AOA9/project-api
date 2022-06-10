@@ -1,4 +1,5 @@
 const models = require('../models');
+const { isAdmin } = require('../services/auth');
 const response = require('../services/response')
 
 const index = async (req, res, next) => {
@@ -15,10 +16,26 @@ const index = async (req, res, next) => {
 const show = (req, res, next) => {
     
 }
-const create = (req, res, next) => {
-    const title = req.body.title
-    const content = req.body.content
-    
+const create = async (req, res, next) => {
+    const title = String(req.body.title?.trim())
+    const content = String(req.body.content?.trim())
+    if (title == '') {
+        res.send(response.errorResponse('Please fill the post title'))
+        return
+    }
+    if (content == '') {
+        res.send(response.errorResponse('Please fill the post content'))
+        return
+    }
+    console.log(req.file)
+    // const post = await models.Post.create({
+    //     title,
+    //     content,
+    //     userId: req.user.id,
+    //     views: 0,
+    //     verified: isAdmin(req.user) ? 1 : 0,
+    //     // picture: req.file.filename
+    // })
 }
 
 module.exports = {

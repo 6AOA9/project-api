@@ -9,7 +9,7 @@ const successResponse = (data = [], messages = [], extras = {}) => {
     }
 }
 
-const errorResponse = (data = [], messages = []) => {
+const errorResponse = (messages = [], data = null) => {
     // always keep messages as an array
     var messages = Array.isArray(messages) ? messages : [messages]
     return {
