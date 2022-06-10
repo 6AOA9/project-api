@@ -34,9 +34,9 @@ const upload = multer({
 })
 
 router.get('/', postController.index);
-router.get('/:id', isAuthenticated, postController.show);
+router.get('/:id', postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);
 router.delete('/:id', isAuthenticated, postController.remove);
-router.put('/:id', isAuthenticated, postController.update);
+router.put('/:id', isAuthenticated, upload.single('picture'), postController.update);
 
 module.exports = router;

@@ -7,7 +7,9 @@ var router = express.Router();
 
 router.post('/', isAuthenticated, categoryController.store);
 router.get('/', categoryController.index);
-router.delete('/:id', isAuthenticated, categoryController.Update);
+router.get('/:id', categoryController.show);
+router.put('/:id', isAuthenticated, categoryController.update)
+router.delete('/:id', isAuthenticated, categoryController.remove);
 
 
 

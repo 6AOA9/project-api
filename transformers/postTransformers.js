@@ -1,11 +1,11 @@
-const postTransformers = (post) => {
-    post.photo = `${process.env.URL + process.env.UPLOADS + post.photo}`
+const postTransformer = (post) => {
+    post.picture = `${process.env.URL + '' + process.env.UPLOADS + '' + post.picture}`
     return post;
 }
-const postsTransformers = (ArrayOfposts) => {
-    return ArrayOfposts.map((singlepost) => postTransformers(singlepost))
+const postsTransformer = (ArrayOfposts) => {
+    return ArrayOfposts.map((singlepost) => postTransformer(singlepost))
 };
 module.exports = {
-    postTransformers,
-    postsTransformers
+    postTransformer,
+    postsTransformer
 }

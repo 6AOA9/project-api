@@ -28,12 +28,14 @@ const store = async (req, res, next) => {
 
 //SHOW
 const index = async (req, res) => {
-    const allowedOrderBy = { date: 'createdAt', views: 'views' }
-    const orderBy = (allowedOrderBy[req?.query?.orderBy]) ? allowedOrderBy[req?.query?.orderBy] : 'id'
     const tags = await models.Tag.findAll({
-        orderBy: [orderBy, 'DESC']
+        orderBy: ['title', 'ASC']
     })
-    res.send(response.successResponse(tags))
+    if (tags) {
+        res.send(response.successResponse(tags))
+    } else {
+        res.send(response.errorResponse('Please try again later'))
+    }
 };
 
 

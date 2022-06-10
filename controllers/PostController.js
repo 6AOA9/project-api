@@ -1,10 +1,10 @@
 const models = require('../models');
 const { isAdmin } = require('../services/auth');
 const response = require('../services/response');
-const postTransformers = require('../transformers/postTransformers');
+const fs = require('fs')
+const { postTransformer, postsTransformer } = require('../transformers/postTransformers');
 
 
-//SHOW
 const index = async (req, res, next) => {
     const allowedOrderBy = { date: 'createdAt', views: 'views' }
     const orderBy = (allowedOrderBy[req?.query?.orderBy]) ? allowedOrderBy[req?.query?.orderBy] : 'id'
@@ -17,23 +17,32 @@ const index = async (req, res, next) => {
         ],
         orderBy: [orderBy, 'DESC']
     })
-    res.send(response.successResponse(posts))
+    res.send(response.successResponse(postsTransformer(posts)))
 };
 
 
 //GET BY ID
 const show = async (req, res, next) => {
-    const currentPost = await models.Post.findByPk(req.params.id, {
-        // include: [{
-        //     model: models.,
-        // }],
+    const post = await models.Post.findOne({
+        where: {
+            id: req.params.id,
+            verified: 1
+        },
+        include: [
+            models.User,
+            models.Category,
+            models.Tag
+        ],
     });
-    currentPost.views = currentPost.views + 1
-    currentPost.save()
-    if (currentPost) {
-        res.send(successResponse('', { user: postTransformers(currentPost) }))
+    
+    if (post) {
+        post.views = post.views + 1
+        post.save().then((post) => {
+            res.send(response.successResponse(postTransformer(post)))
+        })
     } else {
-        res.send(errorResponse('There was an error'))
+        res.status(404)
+        res.send(response.errorResponse('Post not found'))
     }
 };
 
@@ -43,6 +52,7 @@ const create = async (req, res, next) => {
     const title = String(req.body.title?.trim())
     const content = String(req.body.content?.trim())
     const categories = req.body.categories
+    const tags = req.body.tags
     if (title == '') {
         res.send(response.errorResponse('Please fill the post title'))
         return
@@ -57,14 +67,16 @@ const create = async (req, res, next) => {
         userId: req.user.id,
         views: 0,
         verified: isAdmin(req.user) ? 1 : 0,
-        picture: req.file.filename,
+        picture: req.file?.filename,
     })
     if (post) {
-        console.log(categories)
         if (Array.isArray(categories)) {
             post.setCategories(categories)
         }
-        res.send(response.successResponse(post))
+        if (Array.isArray(tags)) {
+            post.setTags(tags)
+        }
+        res.send(response.successResponse(postTransformer(post)))
     } else {
         res.send(response.errorResponse('An error occurred while adding the post'))
     }
@@ -74,50 +86,52 @@ const create = async (req, res, next) => {
 //DELETE
 const remove = async function (req, res, next) {
     const id = +req.params.id
-    const userId = req.user.id
-    const postDelete = await models.Post.findByPk(id)
-    if (postDelete) {
-        if (userId == postDelete.userId) {
-            const deleted = await models.Post.update({ deletedAt: new Date() }, {
-                where: {
-                    id: id
-                }
-            });
-            if (deleted) {
-                res.send(response.successResponse('Post has been deleted'))
-                return
-            };
-        };
-    };
-    res.send(response.errorResponse('An error occurred while deleting Post'))
+    const deleted = await models.Post.destroy({
+        where: {
+          id
+        }
+    });
+    if (deleted) {
+        res.send(response.successResponse(null, 'Post has been deleted'))
+    } else {
+        res.send(response.errorResponse('An error occurred while deleting Post'))
+    }
 }
 
 
 //UPDATE
 const update = async (req, res) => {
-    var response = {
-        success: false,
-        message: [],
-        data: {}
-    }
     const id = req.params.id;
-    const Post = await models.Post.findByPk(id);
-    if (Post) {
-        if (req.body.title) {
-            Post.title = req.body.title
+    const title = String(req.body.title?.trim())
+    const content = String(req.body.content?.trim())
+    const categories = req.body.categories
+    const tags = req.body.tags
+    const post = await models.Post.findByPk(id);
+    if (post) {
+        if (title) {
+            post.title = title
         };
-        if (req.body.content) {
-            Post.content = req.body.content
+        if (content) {
+            post.content = content
         };
-
-        Post.save()
-        response.message.push("Post has been updated");
-        response.success = true;
-        response.data = Post;
-        res.send(response);
+        if (Array.isArray(categories)) {
+            post.setCategories(categories)
+        }
+        if (Array.isArray(tags)) {
+            post.setTags(tags)
+        }
+        if (req.file) {
+            fs.unlink('uploads/' + post.picture, () => { })
+            post.picture = req.file?.filename
+        }
+        post.save().then((post) => {
+            res.send(response.successResponse(postTransformer(post)));
+            return
+        })
+        
     } else {
-        response.message.push("not found");
-        res.send(response);
+        res.status(404)
+        res.send(response.errorResponse('The post is undefined'));
     };
 };
 

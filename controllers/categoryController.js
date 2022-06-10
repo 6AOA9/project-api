@@ -22,35 +22,61 @@ const store = async (req, res, next) => {
 }
 
 
-//SHOW
-const index = async (req, res, next) => {
-    const allowedOrderBy = { date: 'createdAt', views: 'views' }
-    const orderBy = (allowedOrderBy[req?.query?.orderBy]) ? allowedOrderBy[req?.query?.orderBy] : 'id'
-    const category = await models.Category.findAll({
-        orderBy: [orderBy, 'DESC']
+
+const index = async (req, res, next) => {   
+    const categories = await models.Category.findAll({
+        orderBy: ['title', 'ASC']
     })
-    res.send(response.successResponse(category))
+    if (categories) {
+        res.send(response.successResponse(categories))
+    } else {
+        res.send(response.errorResponse('An error occurred'))
+    }
 };
 
+const show = async (req, res, next) => {   
+    const id = +req.params.id
+    const category = await models.Category.findOne({
+        where: {
+            id
+        }
+    })
+    if (category) {
+        res.send(response.successResponse(category))
+    } else {
+        res.status(404)
+        res.send(response.errorResponse('Category not found'))
+    }
+};
+
+const update = async (req, res, next) => {
+    const id = +req.params.id
+    const title = req.body.title
+    const category = models.Category.findByPk(id)
+    if (category) {
+        category.title = title
+        category.save().then((category) => {
+            res.send(response.successResponse(category, 'Category has been updated'))
+        })
+    } else {
+        res.status(404)
+        res.send(response.errorResponse('Categoy not found'))
+    }
+}
 
 //DELETE
-const Update = async function (req, res, next) {
+const remove = async function (req, res, next) {
     const id = +req.params.id
-    const postId = req.user.id
-    const cateDelete = await models.Category.findByPk(id)
-    if (cateDelete) {
-        if (postId == cateDelete.id) {
-            const deleted = await models.Category.update({ deletedAt: new Date() }, {
-                where: {
-                    id: id
-                }
-            });
-            if (deleted) {
-                res.send(response.successResponse('Category has been deleted'))
-                return
-            };
-        };
-    };
+    const deleted = await models.Category.destroy({
+        where: {
+          id
+        }
+    });
+    if (deleted) {
+        res.send(response.successResponse(null, 'Category has been deleted'))
+    } else {
+        res.send(response.errorResponse('An error occurred while deleting Category'))
+    }
     res.send(response.errorResponse('An error occurred while deleting Category'))
 }
 
@@ -58,6 +84,8 @@ const Update = async function (req, res, next) {
 
 module.exports = {
     store,
+    show,
     index,
-    Update
+    remove,
+    update
 }
