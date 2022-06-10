@@ -22,8 +22,8 @@ const store = async (req, res, next) => {
 }
 
 
-
-const index = async (req, res, next) => {   
+//INDEX
+const index = async (req, res, next) => {
     const categories = await models.Category.findAll({
         orderBy: ['title', 'ASC']
     })
@@ -34,7 +34,9 @@ const index = async (req, res, next) => {
     }
 };
 
-const show = async (req, res, next) => {   
+
+//SHOW BY ID
+const show = async (req, res, next) => {
     const id = +req.params.id
     const category = await models.Category.findOne({
         where: {
@@ -49,10 +51,12 @@ const show = async (req, res, next) => {
     }
 };
 
+
+//UPDATE
 const update = async (req, res, next) => {
     const id = +req.params.id
     const title = req.body.title
-    const category = models.Category.findByPk(id)
+    const category = await models.Category.findByPk(id)
     if (category) {
         category.title = title
         category.save().then((category) => {
@@ -69,16 +73,15 @@ const remove = async function (req, res, next) {
     const id = +req.params.id
     const deleted = await models.Category.destroy({
         where: {
-          id
+            id
         }
     });
     if (deleted) {
         res.send(response.successResponse(null, 'Category has been deleted'))
     } else {
         res.send(response.errorResponse('An error occurred while deleting Category'))
-    }
-    res.send(response.errorResponse('An error occurred while deleting Category'))
-}
+    };
+};
 
 
 
