@@ -6,7 +6,7 @@ const { optionTransformers, optionsTransformers } = require('../transformers/opt
 
 //UPDATE
 const update = async function (req, res, next) {
-    const newSiteData = {...req.body};
+    const newSiteData = { ...req.body };
     const previoueSiteData = await models.Option.findOne({
         where: {
             optionKey: 'site_options'
