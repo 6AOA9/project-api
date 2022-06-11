@@ -3,7 +3,8 @@ const router = express.Router();
 var optionController = require('../controllers/OptionController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
-const multer = require('multer')
+const multer = require('multer');
+const { isAdmin } = require('../middlewares/isAdmin');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -36,7 +37,7 @@ const upload = multer({
 
 
 // router.post("/", isAuthenticated, upload.single('optionValue'), optionController.store);
-router.put("/", isAuthenticated, upload.single('logo'), optionController.update);
+router.put("/", isAuthenticated, isAdmin, upload.single('logo'), optionController.update);
 router.get('/', optionController.index);
 
 

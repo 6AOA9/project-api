@@ -3,7 +3,8 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
-const multer = require('multer')
+const multer = require('multer');
+const { isOwner } = require('../middlewares/isOwner');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -36,7 +37,7 @@ const upload = multer({
 router.get('/', postController.index);
 router.get('/:id', postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);
-router.delete('/:id', isAuthenticated, postController.remove);
-router.put('/:id', isAuthenticated, upload.single('picture'), postController.update);
+router.delete('/:id', isAuthenticated, isOwner('ABDULLA OMAR'), postController.remove);
+router.put('/:id', isAuthenticated, isOwner('ABDULLA OMAR'), upload.single('picture'), postController.update);
 
 module.exports = router;
