@@ -6,4 +6,5 @@ exports.isAdmin = (req, res, next) => {
     }
     res.status(403)
     res.send(errorResponse('You are not authorized'))
+    return
 }

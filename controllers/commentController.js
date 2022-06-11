@@ -40,6 +40,23 @@ const store = async (req, res, next) => {
 };
 
 
+
+//DELETE
+const remove = async function (req, res, next) {
+    const id = +req.params.id
+    const deleted = await models.Comment.destroy({
+        where: {
+            id
+        }
+    });
+    if (deleted) {
+        res.send(response.successResponse(null, 'Comment has been deleted'))
+    } else {
+        res.send(response.errorResponse('An error occurred while deleting Comment'))
+    };
+};
+
 module.exports = {
     store,
+    remove
 }

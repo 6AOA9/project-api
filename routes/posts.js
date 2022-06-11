@@ -37,7 +37,7 @@ const upload = multer({
 router.get('/', postController.index);
 router.get('/:id', postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);
-router.delete('/:id', isAuthenticated, isOwner('ABDULLA OMAR'), postController.remove);
-router.put('/:id', isAuthenticated, isOwner('ABDULLA OMAR'), upload.single('picture'), postController.update);
+router.delete('/:id', isAuthenticated, postController.remove);
+router.put('/:id', isAuthenticated, upload.single('picture'), postController.update);
 
 module.exports = router;
