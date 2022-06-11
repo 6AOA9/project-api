@@ -1,6 +1,6 @@
-var express = require('express');
-var router = express.Router();
-const userController = require('../controllers/userController');
+const express = require('express');
+const router = express.Router();
+var optionController = require('../controllers/OptionController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer')
@@ -34,14 +34,10 @@ const upload = multer({
 })
 
 
-router.get('/', userController.index);
-router.get('/:id', userController.show);
-router.post('/', userController.signup);
-router.post('/admin', isAuthenticated, userController.signup);
-router.post('/signin', userController.signin);
-router.put('/:id', isAuthenticated, upload.single('profilePicture'), userController.update);
-router.delete('/:id', isAuthenticated, userController.remove);
-// router.put('/admin', isAuthenticated, upload.single('profilePicture'), userController.update);
+
+// router.post("/", isAuthenticated, upload.single('optionValue'), optionController.store);
+router.put("/:id", isAuthenticated, upload.single('optionValue'), optionController.update);
+router.get('/', optionController.index);
 
 
 module.exports = router;

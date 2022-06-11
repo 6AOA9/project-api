@@ -4,4 +4,10 @@ const userTransformer = (user) => {
     return user;
 }
 
-exports.userTransformer = userTransformer;
+const usersTransformer = (ArrayOfposts) => {
+    return ArrayOfposts.map((singlepost) => userTransformer(singlepost))
+};
+module.exports = {
+    userTransformer,
+    usersTransformer
+}

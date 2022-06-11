@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       models.Tag.belongsToMany(models.Post, {
         through: 'post_tag',
         foreignKey: 'tagId'
-      })
+      });
     }
   }
   Tag.init({

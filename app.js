@@ -11,6 +11,8 @@ var usersRouter = require('./routes/users');
 var postsRouter = require('./routes/posts');
 var categoriesRouter = require('./routes/categories');
 var tagsRouter = require('./routes/tags');
+var optionRouter = require('./routes/options');
+var commentRouter = require('./routes/comments');
 
 const req = require('express/lib/request');
 
@@ -33,6 +35,10 @@ app.use('/users', usersRouter);
 app.use('/posts', postsRouter);
 app.use('/categories', categoriesRouter);
 app.use('/tags', tagsRouter);
+app.use('/options', optionRouter);
+app.use('/comments', commentRouter);
+
+
 
 
 // catch 404 and forward to error handler

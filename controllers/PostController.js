@@ -1,5 +1,5 @@
 const models = require('../models');
-const { isAdmin } = require('../services/auth');
+const { isAdmin, isUser, signUser } = require('../services/auth');
 const response = require('../services/response');
 const fs = require('fs')
 const { postTransformer, postsTransformer } = require('../transformers/postTransformers');
@@ -34,7 +34,7 @@ const show = async (req, res, next) => {
             models.Tag
         ],
     });
-    
+
     if (post) {
         post.views = post.views + 1
         post.save().then((post) => {
@@ -88,7 +88,7 @@ const remove = async function (req, res, next) {
     const id = +req.params.id
     const deleted = await models.Post.destroy({
         where: {
-          id
+            id,
         }
     });
     if (deleted) {
@@ -128,7 +128,7 @@ const update = async (req, res) => {
             res.send(response.successResponse(postTransformer(post)));
             return
         })
-        
+
     } else {
         res.status(404)
         res.send(response.errorResponse('The post is undefined'));
