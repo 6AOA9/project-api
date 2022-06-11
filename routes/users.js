@@ -3,7 +3,8 @@ var router = express.Router();
 const userController = require('../controllers/userController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
-const multer = require('multer')
+const multer = require('multer');
+const { isAdmin } = require('../middlewares/isAdmin');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -40,7 +41,7 @@ router.post('/', userController.signup);
 router.post('/admin', isAuthenticated, userController.signup);
 router.post('/signin', userController.signin);
 router.put('/:id', isAuthenticated, upload.single('profilePicture'), userController.update);
-router.delete('/:id', isAuthenticated, userController.remove);
+router.delete('/:id', isAuthenticated, isAdmin, userController.remove);
 // router.put('/admin', isAuthenticated, upload.single('profilePicture'), userController.update);
 
 
