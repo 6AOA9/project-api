@@ -20,8 +20,14 @@ const update = async function (req, res, next) {
         ...previoueValues,
         ...newSiteData
     })
-    previoueSiteData.save()
-    res.send(newSiteData)
+    previoueSiteData.save().then((updatedOptions) => {
+        updatedValues = JSON.parse(updatedOptions.optionValue) 
+        res.send(response.successResponse({
+            ...updatedValues,
+            logo: updatedValues?.logo ? process.env.URL + process.env.UPLOADS + updatedValues.logo : null
+        }))
+    })
+    
 }
 
 
