@@ -36,7 +36,7 @@ const upload = multer({
 
 
 // router.post("/", isAuthenticated, upload.single('optionValue'), optionController.store);
-router.put("/:id", isAuthenticated, upload.single('optionValue'), optionController.update);
+router.put("/", isAuthenticated, upload.single('logo'), optionController.update);
 router.get('/', optionController.index);
 
 
