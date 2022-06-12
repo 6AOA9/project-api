@@ -9,7 +9,7 @@ exports.isOwner = (type) => {
         switch (type) {
             case 'profile':
                 const id = req.params?.id
-                if (req.user.id === id) {
+                if (req.user.id == id) {
                     return next()
                 }
                 res.status(403)
