@@ -6,6 +6,6 @@ const { isAdmin } = require('../middlewares/isAdmin');
 var router = express.Router();
 
 router.post('/', isAuthenticated, commentController.store);
-router.delete('/:id', isAuthenticated, commentController.remove);
+router.delete('/:id', isAuthenticated, isAdmin, commentController.remove);
 
 module.exports = router;

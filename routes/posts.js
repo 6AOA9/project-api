@@ -32,7 +32,7 @@ const upload = multer({
     storage: storage,
     fileFilter: acceptFile,
     limits: { fileSize: 10485760 }
-})
+});
 
 router.get('/', postController.index);
 router.get('/:id', postController.show);

@@ -34,9 +34,6 @@ const upload = multer({
     limits: { fileSize: 10485760 }
 })
 
-
-
-// router.post("/", isAuthenticated, upload.single('optionValue'), optionController.store);
 router.put("/", isAuthenticated, isAdmin, upload.single('logo'), optionController.update);
 router.get('/', optionController.index);
 

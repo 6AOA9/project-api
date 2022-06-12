@@ -114,8 +114,7 @@ const update = async (req, res) => {
 
         };
         if (password) {
-            user.password = password
-
+            user.password = authService.hashPassword(password);
         };
         if (req.file) {
             fs.unlink('uploads/' + user.profilePicture, () => { })

@@ -32,7 +32,6 @@ var authService = {
         } catch (error) {
             return false
         }
-        
     },
     isAdmin: function (user) {
         return user?.role == 1

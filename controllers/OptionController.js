@@ -21,14 +21,15 @@ const update = async function (req, res, next) {
         ...newSiteData
     })
     previoueSiteData.save().then((updatedOptions) => {
-        updatedValues = JSON.parse(updatedOptions.optionValue) 
+        updatedValues = JSON.parse(updatedOptions.optionValue)
         res.send(response.successResponse({
             ...updatedValues,
             logo: updatedValues?.logo ? process.env.URL + process.env.UPLOADS + updatedValues.logo : null
         }))
     })
-    
+
 }
+
 
 
 //INDEX
@@ -36,14 +37,13 @@ const index = async (req, res, next) => {
     const option = await models.Option.findAll({
     })
     if (option) {
-        res.send(response.successResponse(postsTransformer(option)))
+        res.send(response.successResponse(optionTransformers(option)))
     } else {
         res.send(response.errorResponse('An error occurred'))
-    }
+    };
 };
 
 module.exports = {
-    // store,
     update,
     index
 }
