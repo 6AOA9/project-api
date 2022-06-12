@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-var optionController = require('../controllers/OptionController');
+var optionController = require('../controllers/optionController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer');

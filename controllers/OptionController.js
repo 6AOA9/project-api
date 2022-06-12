@@ -1,7 +1,7 @@
 const response = require('../services/response');
 const models = require('../models');
 const { isAdmin, isUser, signUser } = require('../services/auth');
-const { optionTransformers, optionsTransformers } = require('../transformers/optionTransformers')
+const { optionsTransformer } = require('../transformers/optionsTransformers')
 
 
 //UPDATE
@@ -21,11 +21,8 @@ const update = async function (req, res, next) {
         ...newSiteData
     })
     previoueSiteData.save().then((updatedOptions) => {
-        updatedValues = JSON.parse(updatedOptions.optionValue)
-        res.send(response.successResponse({
-            ...updatedValues,
-            logo: updatedValues?.logo ? process.env.URL + process.env.UPLOADS + updatedValues.logo : null
-        }))
+        updatedValues = JSON.parse(updatedOptions.optionValue) 
+        res.send(response.successResponse(optionsTransformer(updatedValues)))
     })
 
 }

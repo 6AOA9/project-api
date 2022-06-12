@@ -4,7 +4,6 @@ const response = require('../services/response')
 const { validateEmail, validatePassword } = require('../services/validation')
 const authService = require('../services/auth')
 const fs = require('fs')
-const { profilePictureTransformer } = require('../transformers/profilePictureTransformers');
 const { userTransformer, usersTransformer } = require('../transformers/userTransformers');
 
 //INDEX
@@ -121,7 +120,7 @@ const update = async (req, res) => {
             user.profilePicture = req.file?.filename
         }
         user.save().then((user) => {
-            res.send(response.successResponse(profilePictureTransformer, userTransformer(user)));
+            res.send(response.successResponse(userTransformer(user)));
             return
         })
     } else {
