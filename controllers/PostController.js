@@ -51,6 +51,7 @@ const show = async (req, res, next) => {
 const create = async (req, res, next) => {
     const title = String(req.body.title?.trim())
     const content = String(req.body.content?.trim())
+    const excerpt = String(req.body.excerpt?.trim())
     const categories = req.body.categories
     const tags = req.body.tags
     if (title == '') {
@@ -68,6 +69,7 @@ const create = async (req, res, next) => {
         views: 0,
         verified: isAdmin(req.user) ? 1 : 0,
         picture: req.file?.filename,
+        excerpt
     })
     if (post) {
         if (Array.isArray(categories)) {
@@ -104,6 +106,7 @@ const update = async (req, res) => {
     const id = req.params.id;
     const title = String(req.body.title?.trim())
     const content = String(req.body.content?.trim())
+    const excerpt = String(req.body.excerpt?.trim())
     const categories = req.body.categories
     const tags = req.body.tags
     const post = await models.Post.findByPk(id);
@@ -113,6 +116,9 @@ const update = async (req, res) => {
         };
         if (content) {
             post.content = content
+        };
+        if (excerpt) {
+            post.excerpt = excerpt
         };
         if (Array.isArray(categories)) {
             post.setCategories(categories)
@@ -128,7 +134,6 @@ const update = async (req, res) => {
             res.send(response.successResponse(postTransformer(post)));
             return
         })
-
     } else {
         res.status(404)
         res.send(response.errorResponse('The post is undefined'));
