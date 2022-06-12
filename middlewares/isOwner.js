@@ -17,7 +17,11 @@ exports.isOwner = (type) => {
                 return
             case 'post':
                 const postId = req.params.id
-                const post = await models.Post.findByPk(postId)
+                const post = await models.Post.findOne({
+                    where: {
+                        id: postId
+                    }
+                })
                 if (post.userId === req.user.id) {
                     return next()
                 }
