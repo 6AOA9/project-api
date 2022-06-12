@@ -5,7 +5,7 @@ exports.isOwner = (type) => {
     return async (req, res, next) => {
         if (req.user.role === 1) {
             return next()
-        }
+        };
         switch (type) {
             case 'profile':
                 const id = req.params?.id
@@ -24,6 +24,6 @@ exports.isOwner = (type) => {
                 res.status(403)
                 res.send(errorResponse('You are not authorized'))
                 return
-        }
-    }
-}
+        };
+    };
+};

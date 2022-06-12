@@ -72,7 +72,7 @@ const signup = async (req, res, next) => {
 }
 
 
-//SIGNIN
+//SIGNIN USER
 const signin = async (req, res, next) => {
     const email = req.body.email?.trim()
     const password = req.body.password?.trim()
@@ -153,4 +153,4 @@ module.exports = {
     index,
     show,
     remove
-}
+};

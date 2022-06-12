@@ -6,7 +6,7 @@ const path = require('path');
 const multer = require('multer');
 const { isAdmin } = require('../middlewares/isAdmin');
 const { isUser } = require('../middlewares/isUser');
-// const { isOwner } = require('../middlewares/isOwner');
+const { isOwner } = require('../middlewares/isOwner');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
         cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname))
     }
-})
+});
 const acceptFile = function (req, file, cb) {
     const acceptedMimType = [
         'image/jpeg',
@@ -34,7 +34,7 @@ const upload = multer({
     storage: storage,
     fileFilter: acceptFile,
     limits: { fileSize: 10485760 }
-})
+});
 
 
 router.get('/', userController.index);
@@ -42,7 +42,7 @@ router.get('/:id', isAuthenticated, userController.show);
 router.post('/', userController.signup);
 router.post('/admin', isAuthenticated, isAdmin, userController.signup);
 router.post('/signin', userController.signin);
-router.put('/:id', isAuthenticated, isUser, upload.single('profilePicture'), userController.update);
+router.put('/:id', isAuthenticated, isOwner('profile'), upload.single('profilePicture'), userController.update);
 router.delete('/:id', isAuthenticated, isAdmin, userController.remove);
 
 module.exports = router;
