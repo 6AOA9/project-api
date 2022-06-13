@@ -31,7 +31,8 @@ const show = async (req, res, next) => {
         include: [
             models.User,
             models.Category,
-            models.Tag
+            models.Tag,
+            models.Comment
         ],
     });
 
