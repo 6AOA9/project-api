@@ -34,7 +34,6 @@ const upload = multer({
     limits: { fileSize: 10485760 }
 })
 
-
 router.post('/', isAuthenticated, isAdmin, upload.single('picture'), adController.store);
 router.get('/', adController.index);
 router.delete('/:id', isAuthenticated, isAdmin, adController.remove);
