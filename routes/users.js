@@ -5,7 +5,6 @@ const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer');
 const { isAdmin } = require('../middlewares/isAdmin');
-const { isUser } = require('../middlewares/isUser');
 const { isOwner } = require('../middlewares/isOwner');
 
 const storage = multer.diskStorage({
