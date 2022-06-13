@@ -13,6 +13,8 @@ var categoriesRouter = require('./routes/categories');
 var tagsRouter = require('./routes/tags');
 var optionRouter = require('./routes/options');
 var commentRouter = require('./routes/comments');
+var adRouter = require('./routes/ads');
+
 
 const req = require('express/lib/request');
 
@@ -37,6 +39,8 @@ app.use('/categories', categoriesRouter);
 app.use('/tags', tagsRouter);
 app.use('/options', optionRouter);
 app.use('/comments', commentRouter);
+app.use('/ads', adRouter);
+
 
 
 

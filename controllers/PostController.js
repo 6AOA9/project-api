@@ -57,11 +57,11 @@ const create = async (req, res, next) => {
     if (title == '') {
         res.send(response.errorResponse('Please fill the post title'))
         return
-    }
+    };
     if (content == '') {
         res.send(response.errorResponse('Please fill the post content'))
         return
-    }
+    };
     const post = await models.Post.create({
         title,
         content,
@@ -81,7 +81,7 @@ const create = async (req, res, next) => {
         res.send(response.successResponse(postTransformer(post)))
     } else {
         res.send(response.errorResponse('An error occurred while adding the post'))
-    }
+    };
 };
 
 
@@ -97,8 +97,8 @@ const remove = async function (req, res, next) {
         res.send(response.successResponse(null, 'Post has been deleted'))
     } else {
         res.send(response.errorResponse('An error occurred while deleting Post'))
-    }
-}
+    };
+};
 
 
 //UPDATE
