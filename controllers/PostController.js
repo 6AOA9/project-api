@@ -29,10 +29,13 @@ const show = async (req, res, next) => {
             verified: 1
         },
         include: [
-            models.User,
-            models.Category,
-            models.Tag,
-            models.Comment
+            {model: models.User},
+            {model: models.Category},
+            {model: models.Tag},
+            {
+                model: models.Comment,
+                include: [models.User]
+            }
         ],
     });
 

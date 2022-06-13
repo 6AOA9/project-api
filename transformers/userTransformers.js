@@ -12,8 +12,8 @@ const userTransformer = (user) => {
     return user;
 }
 
-const usersTransformer = (ArrayOfposts) => {
-    return ArrayOfposts.map((singlepost) => userTransformer(singlepost))
+const usersTransformer = (users) => {
+    return users.map((user) => userTransformer(user))
 };
 module.exports = {
     userTransformer,

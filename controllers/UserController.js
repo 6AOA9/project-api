@@ -65,7 +65,7 @@ const signup = async (req, res, next) => {
         }
     });
     if (created) {
-        res.send(response.successResponse(userTransformer(user, 'User created successfully')))
+        res.send(response.successResponse(userTransformer(user), 'User created successfully'))
     } else {
         res.send(response.errorResponse('User is already registered'))
     }
@@ -83,7 +83,7 @@ const signin = async (req, res, next) => {
     })
     if (user) {
         if (authService.comparePasswords(password, user.password)) {
-            res.send(response.successResponse(user, null, {
+            res.send(response.successResponse(userTransformer(user), null, {
                 token: authService.signUser(user)
             }))
         } else {

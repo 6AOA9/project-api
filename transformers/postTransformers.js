@@ -1,4 +1,5 @@
 const moment = require('moment')
+const { commentsTransformers } = require('./commentTransformers')
 const { userTransformer } = require('./userTransformers')
 
 const postTransformer = (post) => {
@@ -12,10 +13,13 @@ const postTransformer = (post) => {
     if (post.updatedAt) {
         post.dataValues.updatedAt = moment(post.updatedAt).fromNow();
     }
+    if (post.Comments) {
+        post.Comments = commentsTransformers(post.Comments)
+    }
     return post;
 }
-const postsTransformer = (ArrayOfposts) => {
-    return ArrayOfposts.map((singlepost) => postTransformer(singlepost))
+const postsTransformer = (posts) => {
+    return posts.map((singlepost) => postTransformer(singlepost))
 };
 module.exports = {
     postTransformer,
