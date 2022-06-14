@@ -1,11 +1,11 @@
-const adsTransformers = (ads) => {
-    ads.adsValue = `${process.env.URL + process.env.UPLOADS + ads.adsValue}`
-    return ads;
+const adTransformers = (ad) => {
+    ad.picture = `${process.env.URL + process.env.UPLOADS + ad.picture}`
+    return ad;
 }
-const adssTransformers = (ArrayOfadss) => {
-    return ArrayOfadss.map((singleads) => adsTransformers(singleads))
+const adsTransformers = (ads) => {
+    return ads.map((singleAd) => adTransformers(singleAd))
 };
 module.exports = {
-    adsTransformers,
-    adssTransformers
+    adTransformers,
+    adsTransformers
 }

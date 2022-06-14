@@ -1,6 +1,5 @@
 const response = require('../services/response');
 const models = require('../models');
-const { isAdmin, isUser, signUser } = require('../services/auth');
 const { optionsTransformer } = require('../transformers/optionsTransformers')
 
 
@@ -21,7 +20,7 @@ const update = async function (req, res, next) {
         ...newSiteData
     })
     previoueSiteData.save().then((updatedOptions) => {
-        updatedValues = JSON.parse(updatedOptions.optionValue) 
+        updatedValues = JSON.parse(updatedOptions.optionValue)
         res.send(response.successResponse(optionsTransformer(updatedValues)))
     })
 

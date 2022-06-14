@@ -5,6 +5,7 @@ const { validateEmail, validatePassword } = require('../services/validation')
 const authService = require('../services/auth')
 const fs = require('fs')
 const { userTransformer, usersTransformer } = require('../transformers/userTransformers');
+const { postsTransformer } = require('../transformers/postTransformers')
 
 //INDEX
 const index = async (req, res, next) => {
@@ -65,7 +66,7 @@ const signup = async (req, res, next) => {
         }
     });
     if (created) {
-        res.send(response.successResponse(userTransformer(user, 'User created successfully')))
+        res.send(response.successResponse(userTransformer(user), 'User created successfully'))
     } else {
         res.send(response.errorResponse('User is already registered'))
     }
@@ -83,7 +84,7 @@ const signin = async (req, res, next) => {
     })
     if (user) {
         if (authService.comparePasswords(password, user.password)) {
-            res.send(response.successResponse(user, null, {
+            res.send(response.successResponse(userTransformer(user), null, {
                 token: authService.signUser(user)
             }))
         } else {
@@ -146,11 +147,29 @@ const remove = async function (req, res, next) {
     };
 };
 
+const getUserPosts = async (req, res, next) => {
+    const posts = await models.Post.findAll({
+        where: {
+            '$User.id$': req.user.id
+        },
+        include: [
+            {
+                model: models.User,
+            },
+            {
+                model: models.Category
+            }
+        ]
+    })
+    res.send(response.successResponse(postsTransformer(posts)))
+}
+
 module.exports = {
     signup,
     signin,
     update,
     index,
     show,
-    remove
+    remove,
+    getUserPosts
 };

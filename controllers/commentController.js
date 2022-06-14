@@ -15,7 +15,6 @@ const store = async (req, res, next) => {
         return
     }
     const comment = await models.Comment.create({
-        title,
         content,
         userId: req.user.id,
         postId: req.body.postId,
