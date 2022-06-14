@@ -141,6 +141,24 @@ const update = async (req, res) => {
     };
 };
 
+//SHOW POST BY CATEGORY ID
+const showByPostIdFromCategory = async (req, res, next) => {
+    const allowedOrderBy = { date: 'createdAt', views: 'views' }
+    const orderBy = (allowedOrderBy[req?.query?.orderBy]) ? allowedOrderBy[req?.query?.orderBy] : 'id'
+    const posts = await models.Post.findAll({
+        where: {
+            verified: 1
+        },
+        include: [
+            models.Category,
+            {where: categoryWhere}
+        ],
+        orderBy: [orderBy, 'DESC']
+    })
+    res.send(response.successResponse(postsTransformer(posts)))
+};
+
+
 
 module.exports = {
     index,
@@ -148,4 +166,5 @@ module.exports = {
     create,
     remove,
     update,
+    showByPostIdFromCategory,
 }
