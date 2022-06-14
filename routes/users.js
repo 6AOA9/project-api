@@ -5,6 +5,7 @@ const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer');
 const { isAdmin } = require('../middlewares/isAdmin');
+const { isUser } = require('../middlewares/isUser');
 const { isOwner } = require('../middlewares/isOwner');
 
 const storage = multer.diskStorage({
@@ -37,6 +38,7 @@ const upload = multer({
 
 
 router.get('/', userController.index);
+router.get('/getUserPosts', isAuthenticated, isUser, userController.getUserPosts);
 router.get('/:id', isAuthenticated, userController.show);
 router.post('/', userController.signup);
 router.post('/admin', isAuthenticated, isAdmin, userController.signup);

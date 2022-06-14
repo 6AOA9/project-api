@@ -1,7 +1,7 @@
 const { errorResponse } = require("../services/response")
 
 exports.isUser = (req, res, next) => {
-    if (req.user.role === 2) {
+    if (req.user.role == '2') {
         return next()
     }
     res.status(403)
