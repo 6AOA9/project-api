@@ -106,7 +106,7 @@ const create = async (req, res, next) => {
         if (Array.isArray(tags)) {
             post.setTags(tags)
         }
-        res.send(response.successResponse(postTransformer(post)))
+        res.send(response.successResponse(postTransformer(post), 'Post has been added'))
     } else {
         res.send(response.errorResponse('An error occurred while adding the post'))
     };
