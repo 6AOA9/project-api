@@ -21,6 +21,30 @@ const index = async (req, res, next) => {
 };
 
 
+
+//BY CATEGORY
+const index2 = async (req, res, next) => {
+    const result = await models.Post.findAll({
+        attributes: ["id", "title"],
+        include: [
+            {
+                model: models.category_post,
+                where: {
+                    categoryId: true,
+                    postId: true
+                },
+            },
+        ],
+    });
+    if (result) {
+        res.send(response.successResponse(result, res));
+    } else {
+        res.send(response.errorResponse("failed getting result"));
+    };
+};
+
+
+
 //GET BY ID
 const show = async (req, res, next) => {
     const post = await models.Post.findOne({
@@ -29,9 +53,9 @@ const show = async (req, res, next) => {
             verified: 1
         },
         include: [
-            {model: models.User},
-            {model: models.Category},
-            {model: models.Tag},
+            { model: models.User },
+            { model: models.Category },
+            { model: models.Tag },
             {
                 model: models.Comment,
                 include: [models.User]
@@ -147,6 +171,7 @@ const update = async (req, res) => {
 
 module.exports = {
     index,
+    index2,
     show,
     create,
     remove,
