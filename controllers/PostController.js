@@ -25,13 +25,12 @@ const index = async (req, res, next) => {
 //BY CATEGORY
 const index2 = async (req, res, next) => {
     const result = await models.Post.findAll({
-        attributes: ["id", "title"],
         include: [
             {
                 model: models.category_post,
                 where: {
-                    categoryId: true,
-                    postId: true
+                    categoryId: req.body.categoryId,
+                    postId: req.body.postId
                 },
             },
         ],
@@ -169,6 +168,30 @@ const update = async (req, res) => {
 };
 
 
+//VERIFIED
+const verified = async (req, res, next) => {
+    const postId = req.params.id;
+    const isVerified = req.body.verified;
+    if (isVerified === undefined) {
+        res.send(response.errorResponse("verified is required in the request body"))
+    };
+    const isVerifiedPost = await models.Post.findByPk(postId);
+    if (isVerifiedPost) {
+        isVerifiedPost.verified = isVerified
+        isVerifiedPost.save().then((isVerifiedPost) => {
+            res.send(response.successResponse(isVerifiedPost, 'verified has been updated'))
+        })
+    } else {
+        res.status(404)
+        res.send(response.errorResponse('verified not found'))
+    }
+};
+
+
+
+
+
+
 module.exports = {
     index,
     index2,
@@ -176,4 +199,5 @@ module.exports = {
     create,
     remove,
     update,
+    verified
 }

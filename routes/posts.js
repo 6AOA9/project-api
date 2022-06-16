@@ -5,6 +5,7 @@ const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer');
 const { isOwner } = require('../middlewares/isOwner');
+const { isAdmin } = require("../middlewares/isAdmin")
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -40,5 +41,7 @@ router.get('/:id', postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);
 router.delete('/:id', isAuthenticated, isOwner('post'), postController.remove);
 router.put('/:id', isAuthenticated, isOwner('post'), upload.single('picture'), postController.update);
+router.put('/verified/:id', isAuthenticated, isAdmin, postController.verified);
+
 
 module.exports = router;
