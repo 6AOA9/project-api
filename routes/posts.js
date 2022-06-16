@@ -7,10 +7,6 @@ const multer = require('multer');
 const { isOwner } = require('../middlewares/isOwner');
 const { loadUser } = require('../middlewares/loadUser');
 const { isAdmin } = require('../middlewares/isAdmin');
-<<<<<<< HEAD
-
-=======
->>>>>>> 1eec3cb (avatar)
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
