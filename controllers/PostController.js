@@ -6,7 +6,7 @@ const { postTransformer, postsTransformer } = require('../transformers/postTrans
 
 
 const index = async (req, res, next) => {
-    const where = {verified: 1}
+    const where = { verified: 1 }
     if (req.user) {
         if (isAdmin(req.user)) {
             delete where?.['verified'];
@@ -80,7 +80,7 @@ const show = async (req, res, next) => {
             return
         }
     }
-    
+
 
     if (post) {
         post.views = post.views + 1
@@ -189,7 +189,7 @@ const update = async (req, res) => {
 };
 
 
-//VERIFIED
+// //VERIFIED
 const verified = async (req, res, next) => {
     const postId = req.params.id;
     const isVerified = req.body.verified;

@@ -6,6 +6,8 @@ const path = require('path');
 const multer = require('multer');
 const { isOwner } = require('../middlewares/isOwner');
 const { loadUser } = require('../middlewares/loadUser');
+const { isAdmin } = require('../middlewares/isAdmin');
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
