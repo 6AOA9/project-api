@@ -22,7 +22,7 @@ exports.isOwner = (type) => {
                         id: postId
                     }
                 })
-                if (post.userId === req.user.id) {
+                if (post?.userId === req.user.id) {
                     return next()
                 }
                 res.status(403)

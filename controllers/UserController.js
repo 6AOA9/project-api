@@ -150,7 +150,8 @@ const remove = async function (req, res, next) {
 const getUserPosts = async (req, res, next) => {
     const posts = await models.Post.findAll({
         where: {
-            '$User.id$': req.user.id
+            '$User.id$': req.user.id,
+            // verified: 1
         },
         include: [
             {
