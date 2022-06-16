@@ -188,6 +188,20 @@ const update = async (req, res) => {
     };
 };
 
+const verification = async (req, res, next) => {
+    const id = req.params.id
+    let verified = req.body.newStatus
+    if (verified != 1) { 
+        verified = 0
+    }
+    const post = await models.Post.findByPk(id)
+    if (post) {
+        post.verified = verified
+        post.save().then((post) => {
+            res.send(response.successResponse(postTransformer(post), 'Post verification updated'))
+        })
+    }
+}
 
 // //VERIFIED
 const verified = async (req, res, next) => {
@@ -220,5 +234,5 @@ module.exports = {
     create,
     remove,
     update,
-    verified
+    verification
 }

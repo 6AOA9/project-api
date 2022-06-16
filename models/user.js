@@ -1,4 +1,5 @@
 'use strict';
+const md5 = require('md5')
 const {
   Model
 } = require('sequelize');
@@ -19,7 +20,15 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     role: DataTypes.INTEGER,
-    profilePicture: DataTypes.STRING
+    avatar: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        return 'https://www.gravatar.com/avatar/' + md5(this.email) + '?s=130'
+      },
+      set(value) {
+        console.log(value)
+      }
+    }
   }, {
     sequelize,
     modelName: 'User',

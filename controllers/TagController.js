@@ -12,7 +12,7 @@ const store = async (req, res, next) => {
             }
         })
         if (created) {
-            res.send(response.successResponse(Tag))
+            res.send(response.successResponse(Tag, 'Tag has been added'))
         } else {
             res.send(response.errorResponse('The Tag is already there'))
         }

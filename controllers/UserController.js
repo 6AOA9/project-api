@@ -102,26 +102,37 @@ const update = async (req, res) => {
     const name = String(req.body.name?.trim())
     const email = String(req.body.email?.trim())
     const password = String(req.body.password?.trim())
+    const passwordConfirmation = String(req.body.passwordConfirmation?.trim())
+
+    if (name?.length < 2) {
+        res.send(response.errorResponse('The name is too short'))
+        return 
+    }
+    if (!validateEmail(email)) {
+        res.send(response.errorResponse('The email is invalid'))
+        return 
+    }
+    if (password?.length > 0) {
+        if (password?.length <= 6) {
+            res.send(response.errorResponse('New password is too short'))
+            return
+        }
+        if (password != passwordConfirmation) {
+            res.send(response.errorResponse('Passwords do not match'))
+            return
+        }
+    }
 
     const user = await models.User.findByPk(id);
+
     if (user) {
-        if (name) {
-            user.name = name
-
-        };
-        if (email) {
-            user.email = email
-
-        };
-        if (password) {
+        user.name = name
+        user.email = email
+        if (password?.length > 0) {
             user.password = authService.hashPassword(password);
         };
-        if (req.file) {
-            fs.unlink('uploads/' + user.profilePicture, () => { })
-            user.profilePicture = req.file?.filename
-        }
         user.save().then((user) => {
-            res.send(response.successResponse(userTransformer(user)));
+            res.send(response.successResponse(userTransformer(user), 'User has been updated'));
             return
         })
     } else {
