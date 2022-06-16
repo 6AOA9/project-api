@@ -1,17 +1,21 @@
 const models = require('../models');
-const { isAdmin, isUser, signUser } = require('../services/auth');
+const { isAdmin, isUser, isOwner, signUser } = require('../services/auth');
 const response = require('../services/response');
 const fs = require('fs')
 const { postTransformer, postsTransformer } = require('../transformers/postTransformers');
 
 
 const index = async (req, res, next) => {
+    const where = {verified: 1}
+    if (req.user) {
+        if (isAdmin(req.user)) {
+            delete where?.['verified'];
+        }
+    }
     const allowedOrderBy = { date: 'createdAt', views: 'views' }
     const orderBy = (allowedOrderBy[req?.query?.orderBy]) ? allowedOrderBy[req?.query?.orderBy] : 'id'
     const posts = await models.Post.findAll({
-        where: {
-            verified: 1
-        },
+        where,
         include: [
             models.User
         ],
@@ -47,11 +51,11 @@ const index2 = async (req, res, next) => {
 
 //GET BY ID
 const show = async (req, res, next) => {
+    const where = {
+        id: req.params.id
+    }
     const post = await models.Post.findOne({
-        where: {
-            id: req.params.id,
-            verified: 1
-        },
+        where,
         include: [
             { model: models.User },
             { model: models.Category },
@@ -63,11 +67,28 @@ const show = async (req, res, next) => {
         ],
     });
 
+
+    if (req.user) {
+        if (!isAdmin(req.user) && !isOwner(req.user, post.userId)) {
+            res.status(404)
+            res.send(response.errorResponse('Post not found'))
+            return
+        }
+    } else {
+        if (post?.verified == 0) {
+            res.status(404)
+            res.send(response.errorResponse('Post not found'))
+            return
+        }
+    }
+    
+
     if (post) {
         post.views = post.views + 1
         post.save().then((post) => {
             res.send(response.successResponse(postTransformer(post)))
         })
+        return
     } else {
         res.status(404)
         res.send(response.errorResponse('Post not found'))
@@ -159,7 +180,7 @@ const update = async (req, res) => {
             post.picture = req.file?.filename
         }
         post.save().then((post) => {
-            res.send(response.successResponse(postTransformer(post)));
+            res.send(response.successResponse(postTransformer(post), 'Post has been updated'));
             return
         })
     } else {

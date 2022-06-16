@@ -39,6 +39,9 @@ var authService = {
     isUser: function (user) {
         return user?.role == 2
     },
+    isOwner: function(user, postUserId) {
+        return user.id == postUserId
+    },
     hashPassword: function (plainTextPassword) {
         let salt = bcrypt.genSaltSync(10);
         let hash = bcrypt.hashSync(plainTextPassword, salt);
