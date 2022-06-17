@@ -6,6 +6,7 @@ const path = require('path');
 const multer = require('multer');
 const { isOwner } = require('../middlewares/isOwner');
 const { loadUser } = require('../middlewares/loadUser');
+const { isAdmin } = require('../middlewares/isAdmin');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -35,11 +36,12 @@ const upload = multer({
     limits: { fileSize: 10485760 }
 });
 
-router.get('/index2', postController.index2);
+router.get('/getWidePost/:id', postController.getWidePost);
 router.get('/', loadUser, postController.index);
 router.get('/:id', loadUser, postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);
 router.delete('/:id', isAuthenticated, isOwner('post'), postController.remove);
 router.put('/:id', isAuthenticated, isOwner('post'), upload.single('picture'), postController.update);
+router.put('/verified/:id', isAuthenticated, isAdmin, postController.verified);
 
 module.exports = router;
