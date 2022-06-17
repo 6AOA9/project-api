@@ -37,7 +37,8 @@ const upload = multer({
     limits: { fileSize: 10485760 }
 });
 
-router.get('/getWidePost/:id', postController.getWidePost);
+router.get('/getPostsByCategory/:id', postController.getPostsByCategory);
+router.get('/getPostsByTag/:id', postController.getPostsByCategory);
 router.get('/', loadUser, postController.index);
 router.get('/:id', loadUser, postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);

@@ -1,27 +1,22 @@
-const moment = require('moment')
-const { commentsTransformers } = require('./commentTransformers')
-const { userTransformer } = require('./userTransformers')
+const moment = require('moment');
+const { postsTransformer } = require('./postTransformers');
 
-const categoryTransformers = (post) => {
-    post.picture = `${process.env.URL + '' + process.env.UPLOADS + '' + post.picture}`
-    if (post.User) {
-        post.User = userTransformer(post.User)
+const categoryTransformer = (category) => {
+    if (category.createdAt) {
+        category.dataValues.createdAt = moment(category.createdAt).fromNow();
     }
-    if (post.createdAt) {
-        post.dataValues.createdAt = moment(post.createdAt).fromNow();
+    if (category.updatedAt) {
+        category.dataValues.updatedAt = moment(category.updatedAt).fromNow();
     }
-    if (post.updatedAt) {
-        post.dataValues.updatedAt = moment(post.updatedAt).fromNow();
-    }
-    if (post.Comments) {
-        post.Comments = commentsTransformers(post.Comments)
+    if (category.Posts) {
+        category.Posts = postsTransformer(category.Posts)
     }
     return post;
 }
-const categoryTransformer = (posts) => {
-    return posts.map((singlepost) => categoryTransformers(singlepost))
+const categoriesTransformer = (categories) => {
+    return categories.map((category) => categoryTransformers(category))
 };
 module.exports = {
-    categoryTransformers,
+    categoriesTransformer,
     categoryTransformer
 }
