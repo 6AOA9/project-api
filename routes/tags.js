@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
-const tagController = require('../controllers/tagController');
+const tagController = require('../controllers/TagController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 
 
