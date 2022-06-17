@@ -18,7 +18,7 @@ const store = async (req, res, next) => {
         }
         return
     }
-    res.send(errorResponse('Please check the category information'))
+    res.send(response.errorResponse('Please check the category information'))
 }
 
 

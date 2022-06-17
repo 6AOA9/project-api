@@ -188,10 +188,12 @@ const update = async (req, res) => {
     };
 };
 
+
+//VERFIVATION
 const verification = async (req, res, next) => {
     const id = req.params.id
     let verified = req.body.newStatus
-    if (verified != 1) { 
+    if (verified != 1) {
         verified = 0
     }
     const post = await models.Post.findByPk(id)
@@ -202,25 +204,6 @@ const verification = async (req, res, next) => {
         })
     }
 }
-
-// //VERIFIED
-const verified = async (req, res, next) => {
-    const postId = req.params.id;
-    const isVerified = req.body.verified;
-    if (isVerified === undefined) {
-        res.send(response.errorResponse("verified is required in the request body"))
-    };
-    const isVerifiedPost = await models.Post.findByPk(postId);
-    if (isVerifiedPost) {
-        isVerifiedPost.verified = isVerified
-        isVerifiedPost.save().then((isVerifiedPost) => {
-            res.send(response.successResponse(isVerifiedPost, 'verified has been updated'))
-        })
-    } else {
-        res.status(404)
-        res.send(response.errorResponse('verified not found'))
-    }
-};
 
 
 
