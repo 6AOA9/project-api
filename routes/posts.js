@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const postController = require('../controllers/postController');
+// const postController = require('../controllers/PostController');
+const postController = require('./../controllers/PostController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer');
@@ -36,7 +37,8 @@ const upload = multer({
     limits: { fileSize: 10485760 }
 });
 
-router.get('/index2', postController.index2);
+router.get('/getPostsByCategory/:id', postController.getPostsByCategory);
+router.get('/getPostsByTag/:id', postController.getPostsByCategory);
 router.get('/', loadUser, postController.index);
 router.get('/:id', loadUser, postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);

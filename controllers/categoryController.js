@@ -1,6 +1,11 @@
 const models = require('../models')
 const response = require('../services/response')
 
+const {
+    categoryTransformers,
+    categoryTransformer,
+  } = require("../transformers/categoryTransformers");
+
 
 //CREATE CATEGORY
 const store = async (req, res, next) => {
@@ -20,6 +25,17 @@ const store = async (req, res, next) => {
     }
     res.send(response.errorResponse('Please check the category information'))
 }
+
+// const getCategoryPost = async (req, res, next) => {
+//     const categories = await models.Category.findAll({
+//         include: [models.Post]
+//     })
+//     if (categories) {
+//         res.send(response.successResponse(categories))
+//     } else {
+//         res.send(response.errorResponse('An error occurred'))
+//     }
+// };
 
 
 //INDEX
@@ -78,9 +94,14 @@ const remove = async function (req, res, next) {
     });
     if (deleted) {
         res.send(response.successResponse(null, 'Category has been deleted'))
-    } else {
+    } 
+    
+    
+    else {
         res.send(response.errorResponse('An error occurred while deleting Category'))
     };
+    return
+
 };
 
 
@@ -90,5 +111,6 @@ module.exports = {
     show,
     index,
     remove,
-    update
+    update,
+    // getCategoryPost
 }
