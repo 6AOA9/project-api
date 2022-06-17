@@ -26,6 +26,7 @@ const index = async (req, res, next) => {
         }
 >>>>>>> 73220bdd2b001faa515dc8d2ae529f3108406820
     }
+<<<<<<< HEAD
   }
   const allowedOrderBy = { date: "createdAt", views: "views" };
   const orderBy = allowedOrderBy[req?.query?.orderBy]
@@ -37,6 +38,19 @@ const index = async (req, res, next) => {
     orderBy: [orderBy, "DESC"],
   });
   res.send(response.successResponse(postsTransformer(posts)));
+=======
+    const allowedOrderBy = { date: 'createdAt', views: 'views' }
+    const orderBy = (allowedOrderBy[req?.query?.orderBy]) ? allowedOrderBy[req?.query?.orderBy] : 'id'
+    const posts = await models.Post.findAll({
+        where,
+        include: [
+            models.User,
+            models.Category
+        ],
+        orderBy: [orderBy, 'DESC']
+    })
+    res.send(response.successResponse(postsTransformer(posts)))
+>>>>>>> ff0b934 (add category to posts)
 };
 
 //BY CATEGORY
@@ -65,6 +79,7 @@ const index2 = async (req, res, next) => {
         include: [
             {
                 model: models.category_post,
+                required: true,
                 where: {
                     categoryId: req.body.categoryId,
                     postId: req.body.postId

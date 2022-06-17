@@ -43,10 +43,6 @@ router.get('/:id', loadUser, postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);
 router.delete('/:id', isAuthenticated, isOwner('post'), postController.remove);
 router.put('/:id', isAuthenticated, isOwner('post'), upload.single('picture'), postController.update);
-<<<<<<< HEAD
-router.put('/verified/:id', isAuthenticated, isAdmin, postController.verified);
-=======
 router.put('/verification/:id', isAuthenticated, isAdmin, postController.verification)
->>>>>>> 73220bdd2b001faa515dc8d2ae529f3108406820
 
 module.exports = router;
