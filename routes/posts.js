@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const postController = require('../controllers/postController');
+// const postController = require('../controllers/PostController');
+const postController = require('./../controllers/PostController');
 const { isAuthenticated } = require('../middlewares/isAuthenticated');
 const path = require('path');
 const multer = require('multer');
