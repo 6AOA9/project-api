@@ -8,7 +8,7 @@ const {
 } = require("../transformers/postTransformers");
 
 const {
-    categoryTransformers,
+    categoryTransformer,
 } = require("../transformers/categoryTransformers");
 const { tagTransformer } = require("../transformers/tagsTransformers");
 
@@ -43,7 +43,7 @@ const getPostsByCategory = async (req, res, next) => {
         ],
     });
     if (result) {
-        res.send(response.successResponse(categoryTransformers(result)));
+        res.send(response.successResponse(categoryTransformer(result)));
     } else {
         res.send(response.errorResponse("failed getting result"));
     }
@@ -58,6 +58,7 @@ const getPostsByTag = async (req, res, next) => {
             },
         ],
     });
+    console.log(result)
     if (result) {
         res.send(response.successResponse(tagTransformer(result)));
     } else {
@@ -102,36 +103,11 @@ const show = async (req, res, next) => {
         post.save().then((post) => {
             res.send(response.successResponse(postTransformer(post)));
         });
-
-
-        if (req.user) {
-            if (!isAdmin(req.user) && !isOwner(req.user, post.userId)) {
-                res.status(404)
-                res.send(response.errorResponse('Post not found'))
-                return
-            }
-        } else {
-            if (post?.verified == 0) {
-                res.status(404)
-                res.send(response.errorResponse('Post not found'))
-                return
-            }
-        }
-
-
-        if (post) {
-            post.views = post.views + 1
-            post.save().then((post) => {
-                res.send(response.successResponse(postTransformer(post)))
-            })
-            return
-        } else {
-            res.status(404)
-            res.send(response.errorResponse('Post not found'))
-        }
-    };
-}
-
+    } else {
+        res.status(404)
+        res.send(response.errorResponse('Post not found'))
+    }
+};
 //POST
 const create = async (req, res, next) => {
     const title = String(req.body.title?.trim());
@@ -252,4 +228,4 @@ module.exports = {
     remove,
     update,
     verification
-}
+};

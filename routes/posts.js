@@ -38,7 +38,7 @@ const upload = multer({
 });
 
 router.get('/getPostsByCategory/:id', postController.getPostsByCategory);
-router.get('/getPostsByTag/:id', postController.getPostsByCategory);
+router.get('/getPostsByTag/:id', postController.getPostsByTag);
 router.get('/', loadUser, postController.index);
 router.get('/:id', loadUser, postController.show);
 router.post('/', isAuthenticated, upload.single('picture'), postController.create);

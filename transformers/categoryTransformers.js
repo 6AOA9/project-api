@@ -11,10 +11,10 @@ const categoryTransformer = (category) => {
     if (category.Posts) {
         category.Posts = postsTransformer(category.Posts)
     }
-    return post;
+    return category;
 }
 const categoriesTransformer = (categories) => {
-    return categories.map((category) => categoryTransformers(category))
+    return categories.map((category) => categoryTransformer(category))
 };
 module.exports = {
     categoriesTransformer,

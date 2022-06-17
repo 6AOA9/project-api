@@ -1,15 +1,20 @@
 const models = require('../models');
 const response = require('../services/response');
-const fs = require('fs')
+const fs = require('fs');
+const { commentsTransformer } = require('../transformers/commentTransformers');
 
 
 //INDEX
 const index = async (req, res) => {
     const comments = await models.Comment.findAll({
+        include: [
+            {model: models.Post},
+            {model: models.User},
+        ],
         orderBy: ['title', 'ASC']
     })
     if (comments) {
-        res.send(response.successResponse(comments))
+        res.send(response.successResponse(commentsTransformer(comments)))
     } else {
         res.send(response.errorResponse('An error occurred'))
     }

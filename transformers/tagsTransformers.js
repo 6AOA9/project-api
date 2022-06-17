@@ -12,10 +12,10 @@ const tagTransformer = (tag) => {
     if (tag.Posts) {
         tag.Posts = postsTransformer(tag.Posts)
     }
-    return post;
+    return tag;
 }
 const tagsTransformer = (tags) => {
-    return tags.map((tag) => tagTransformers(tag))
+    return tags.map((tag) => tagTransformer(tag))
 };
 module.exports = {
     tagsTransformer,

@@ -11,7 +11,7 @@ const update = async function (req, res, next) {
             optionKey: 'site_options'
         }
     })
-    if (req.file) {
+    if (req?.file) {
         newSiteData.logo = req.file.filename
     }
     previoueValues = JSON.parse(previoueSiteData.optionValue)
@@ -21,7 +21,7 @@ const update = async function (req, res, next) {
     })
     previoueSiteData.save().then((updatedOptions) => {
         updatedValues = JSON.parse(updatedOptions.optionValue)
-        res.send(response.successResponse(optionsTransformer(updatedValues)))
+        res.send(response.successResponse(optionsTransformer(updatedValues), 'Options Updated Successfully'))
     })
 
 }
