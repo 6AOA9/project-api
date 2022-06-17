@@ -13,10 +13,18 @@ const {
   } = require("../transformers/categoryTransformers");
 
 const index = async (req, res, next) => {
+<<<<<<< HEAD
   const where = { verified: 1 };
   if (req.user) {
     if (isAdmin(req.user)) {
       delete where?.["verified"];
+=======
+    const where = { verified: 1 }
+    if (req.user) {
+        if (isAdmin(req.user)) {
+            delete where?.['verified'];
+        }
+>>>>>>> 73220bdd2b001faa515dc8d2ae529f3108406820
     }
   }
   const allowedOrderBy = { date: "createdAt", views: "views" };
@@ -32,6 +40,7 @@ const index = async (req, res, next) => {
 };
 
 //BY CATEGORY
+<<<<<<< HEAD
 const getWidePost = async (req, res, next) => {
   const { id } = req.params;
   console.log(id, "requestttttttt");
@@ -50,6 +59,25 @@ const getWidePost = async (req, res, next) => {
   } else {
     res.send(response.errorResponse("failed getting result"));
   }
+=======
+const index2 = async (req, res, next) => {
+    const result = await models.Post.findAll({
+        include: [
+            {
+                model: models.category_post,
+                where: {
+                    categoryId: req.body.categoryId,
+                    postId: req.body.postId
+                },
+            },
+        ],
+    });
+    if (result) {
+        res.send(response.successResponse(result, res));
+    } else {
+        res.send(response.errorResponse("failed getting result"));
+    };
+>>>>>>> 73220bdd2b001faa515dc8d2ae529f3108406820
 };
 
 //GET BY ID
@@ -89,11 +117,41 @@ const show = async (req, res, next) => {
     post.save().then((post) => {
       res.send(response.successResponse(postTransformer(post)));
     });
+<<<<<<< HEAD
     return;
   } else {
     res.status(404);
     res.send(response.errorResponse("Post not found"));
   }
+=======
+
+
+    if (req.user) {
+        if (!isAdmin(req.user) && !isOwner(req.user, post.userId)) {
+            res.status(404)
+            res.send(response.errorResponse('Post not found'))
+            return
+        }
+    } else {
+        if (post?.verified == 0) {
+            res.status(404)
+            res.send(response.errorResponse('Post not found'))
+            return
+        }
+    }
+
+
+    if (post) {
+        post.views = post.views + 1
+        post.save().then((post) => {
+            res.send(response.successResponse(postTransformer(post)))
+        })
+        return
+    } else {
+        res.status(404)
+        res.send(response.errorResponse('Post not found'))
+    }
+>>>>>>> 73220bdd2b001faa515dc8d2ae529f3108406820
 };
 
 //POST
@@ -191,6 +249,7 @@ const update = async (req, res) => {
   }
 };
 
+<<<<<<< HEAD
 //SHOW POST BY CATEGORY ID
 const showByPostIdFromCategory = async (req, res, next) => {
   const allowedOrderBy = { date: "createdAt", views: "views" };
@@ -238,3 +297,53 @@ module.exports = {
   verified,
   showByPostIdFromCategory,
 };
+=======
+const verification = async (req, res, next) => {
+    const id = req.params.id
+    let verified = req.body.newStatus
+    if (verified != 1) { 
+        verified = 0
+    }
+    const post = await models.Post.findByPk(id)
+    if (post) {
+        post.verified = verified
+        post.save().then((post) => {
+            res.send(response.successResponse(postTransformer(post), 'Post verification updated'))
+        })
+    }
+}
+
+// //VERIFIED
+const verified = async (req, res, next) => {
+    const postId = req.params.id;
+    const isVerified = req.body.verified;
+    if (isVerified === undefined) {
+        res.send(response.errorResponse("verified is required in the request body"))
+    };
+    const isVerifiedPost = await models.Post.findByPk(postId);
+    if (isVerifiedPost) {
+        isVerifiedPost.verified = isVerified
+        isVerifiedPost.save().then((isVerifiedPost) => {
+            res.send(response.successResponse(isVerifiedPost, 'verified has been updated'))
+        })
+    } else {
+        res.status(404)
+        res.send(response.errorResponse('verified not found'))
+    }
+};
+
+
+
+
+
+
+module.exports = {
+    index,
+    index2,
+    show,
+    create,
+    remove,
+    update,
+    verification
+}
+>>>>>>> 73220bdd2b001faa515dc8d2ae529f3108406820

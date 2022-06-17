@@ -17,7 +17,7 @@ const store = async (req, res, next) => {
             }
         })
         if (created) {
-            res.send(response.successResponse(category))
+            res.send(response.successResponse(category, 'Category has been added'))
         } else {
             res.send(response.errorResponse('The category is already there'))
         }

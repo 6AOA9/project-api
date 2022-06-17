@@ -1,9 +1,20 @@
 const models = require('../models');
 const response = require('../services/response');
 const fs = require('fs')
-const { isUser } = require('../services/auth');
 
-// const { postTransformer, postsTransformer } = require('../transformers/postTransformers');
+
+//INDEX
+const index = async (req, res) => {
+    const comments = await models.Comment.findAll({
+        orderBy: ['title', 'ASC']
+    })
+    if (comments) {
+        res.send(response.successResponse(comments))
+    } else {
+        res.send(response.errorResponse('An error occurred'))
+    }
+};
+
 
 
 //STORE
@@ -45,5 +56,6 @@ const remove = async function (req, res, next) {
 
 module.exports = {
     store,
-    remove
+    remove,
+    index
 }
